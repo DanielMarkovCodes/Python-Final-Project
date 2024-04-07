@@ -1,0 +1,61 @@
+import os
+
+# Global variable to store lines of text
+text_lines = []
+
+def read_file(filename):
+    try:
+        with open(filename, 'r') as file:
+            lines = file.readlines()
+            return lines
+    except FileNotFoundError as err:
+        print(f"Error: {err}")
+        raise
+    except IOError as err:
+        print(f"Error: {err}")
+        raise
+
+def get_valid_line_number():
+    while True:
+        try:
+            line_number = int(input("Enter a line number (or 0 to quit): "))
+            if line_number == 0:
+                return None  # Quit the program
+            elif line_number < 0:
+                raise UserWarning("Line number must be greater than or equal to zero.")
+            else:
+                return line_number
+        except ValueError as err:
+            print(f"Error: {err}")
+        except UserWarning as err:
+            print(f"Warning: {err}")
+
+def get_line_by_number(line_number):
+    try:
+        line = text_lines[line_number - 1]
+        return line
+    except IndexError as err:
+        raise UserWarning("Invalid line number. Please enter a valid line number.")
+
+def main():
+    global text_lines
+    filename = input("Enter the filename: ")
+
+    try:
+        text_lines = read_file(filename)
+        print(f"Number of lines in the file: {len(text_lines)}")
+
+        while True:
+            line_number = get_valid_line_number()
+            if line_number is None:
+                break  # User wants to quit
+            else:
+                line = get_line_by_number(line_number)
+                print(f"Line {line_number}: {line}")
+
+    except Exception as err:
+        print("Unknown error has occurred.")
+        print(f"Error details: {err}")
+
+if __name__ == "__main__":
+    main()
